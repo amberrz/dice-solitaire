@@ -1,12 +1,16 @@
 package edu.cnm.deepdive.dicesolitaire;
 
 import android.content.res.Resources;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import edu.cnm.deepdive.dicesolitaire.modlel.Roll;
 import java.text.NumberFormat;
+import java.util.Arrays;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,6 +21,10 @@ private static final String LABEl_ID_FORMAT = "pair_%d_label";
   private int maxPairValue;
   private TextView[] labels;
   private ProgressBar[] count;
+  private Button roller;
+  private TextView rollerDisplay;
+  private Random rng;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -25,7 +33,7 @@ private static final String LABEl_ID_FORMAT = "pair_%d_label";
     labels = new TextView[maxPairValue - minPairValue + 1];
     count = new ProgressBar[maxPairValue - minPairValue + 1];
     Resources res = getResources();
-    Random rng = new Random();
+    rng = new Random();
     NumberFormat formatter = NumberFormat.getNumberInstance();
     for (int i = minPairValue; i <= maxPairValue; i++) {
       String labelISting = String.format(LABEl_ID_FORMAT, i);
@@ -37,5 +45,18 @@ private static final String LABEl_ID_FORMAT = "pair_%d_label";
       count[i - minPairValue] = findViewById(countId);
       count[i - minPairValue].setProgress(1 + rng.nextInt(10));
     }
+    roller = findViewById(R.id.roller);
+    rollerDisplay = findViewById(R.id.roll_display);
+    roller.setOnClickListener(new RollerListener());
   }
+
+  private class RollerListener implements OnClickListener {
+
+    @Override
+    public void onClick(View v) {
+      Roll roll = new Roll(rng);
+     rollerDisplay .setText(Arrays.toString(roll.getDice()));
+    }
+  }
+
 }
