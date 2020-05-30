@@ -14,13 +14,13 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
-private static final String LABEl_ID_FORMAT = "pair_%d_label";
-  private static final String COUNT_ID_FORMAT = "pair_%d_count";
+private static final String PAIR_LABEl_ID_FORMAT = "pair_%d_label";
+  private static final String PAIR_COUNT_ID_FORMAT = "pair_%d_count";
 
   private int minPairValue = 2;
   private int maxPairValue;
-  private TextView[] labels;
-  private ProgressBar[] count;
+  private TextView[] pairLabels;
+  private ProgressBar[] pairCount;
   private Button roller;
   private TextView rollerDisplay;
   private Random rng;
@@ -30,20 +30,20 @@ private static final String LABEl_ID_FORMAT = "pair_%d_label";
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     maxPairValue = 2 * Roll.NUM_FACES;
-    labels = new TextView[maxPairValue - minPairValue + 1];
-    count = new ProgressBar[maxPairValue - minPairValue + 1];
+    pairLabels = new TextView[maxPairValue - minPairValue + 1];
+    pairCount = new ProgressBar[maxPairValue - minPairValue + 1];
     Resources res = getResources();
     rng = new Random();
     NumberFormat formatter = NumberFormat.getNumberInstance();
     for (int i = minPairValue; i <= maxPairValue; i++) {
-      String labelISting = String.format(LABEl_ID_FORMAT, i);
+      String labelISting = String.format(PAIR_LABEl_ID_FORMAT, i);
       int labelId = res.getIdentifier(labelISting, "id", getPackageName());
-      labels[i- minPairValue] = findViewById(labelId);
-      labels[i - minPairValue].setText(formatter.format(i));
-      String countIdString = String.format(COUNT_ID_FORMAT, i);
+      pairLabels[i- minPairValue] = findViewById(labelId);
+      pairLabels[i - minPairValue].setText(formatter.format(i));
+      String countIdString = String.format(PAIR_COUNT_ID_FORMAT, i);
       int countId = res.getIdentifier(countIdString, "id" , getPackageName());
-      count[i - minPairValue] = findViewById(countId);
-      count[i - minPairValue].setProgress(1 + rng.nextInt(10));
+      pairCount[i - minPairValue] = findViewById(countId);
+      pairCount[i - minPairValue].setProgress(1 + rng.nextInt(10));
     }
     roller = findViewById(R.id.roller);
     rollerDisplay = findViewById(R.id.roll_display);
