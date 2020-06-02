@@ -64,7 +64,13 @@ private static final String PAIR_LABEL_ID_FORMAT = "pair_%d_label";
   }
 
   private void setupPlayControls() {
-    roller = findViewById(R.id.roller);
+    class RollerListener implements OnClickListener {
+      @Override
+      public void onClick(View v) {
+        Roll roll = new Roll(rng);
+        // TODO Display dice images.
+      }
+    }
     // TODO Find and write up dice ImageView object.
     roller.setOnClickListener(new RollerListener());
   }
@@ -85,13 +91,5 @@ private static final String PAIR_LABEL_ID_FORMAT = "pair_%d_label";
     }
   }
 
-  private class RollerListener implements OnClickListener {
-
-    @Override
-    public void onClick(View v) {
-      Roll roll = new Roll(rng);
-      // TODO Display dice images.
-    }
-  }
 
 }
