@@ -1,9 +1,12 @@
 package edu.cnm.deepdive.dicesolitaire;
 
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.provider.MediaStore.Images;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,17 +22,21 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
-private static final String PAIR_LABEL_ID_FORMAT = "pair_%d_label";
-  private static final String PAIR_COUNT_ID_FORMAT = "pair_%d_count";
-   private static final String SCRATCH_LABEL_ID_FORMAT = "scratch_%d_label";
-  private static final String SCRATCH_COUNT_ID_FORMAT = "scratch_%d_count";
 
-  private TextView[] scratchLabels;
-  private ProgressBar[] scratchCounts;
+  private static final String PAIR_LABEL_ID_FORMAT = "pair_%d_label";
+  private static final String PAIR_COUNT_ID_FORMAT = "pair_%d_count";
+  private static final String SCRATCH_LABEL_ID_FORMAT = "scratch_%d_label";
+  private static final String SCRATCH_COUNT_ID_FORMAT = "scratch_%d_count";
+  private static final String DIE_IMAGE_ID_FORMAT = "die_%d";
+private static final String DICE_FACE_ID_FORMAT = "face_%d";
   private int minPairValue = 2;
   private int maxPairValue = 2 * Roll.NUM_FACES;
   private TextView[] pairLabels;
   private ProgressBar[] pairCount;
+  private TextView[] scratchLabels;
+  private ProgressBar[] scratchCounts;
+  private ImageView[] diceImages;
+  private Drawable[] diceFaces;
   private Button roller;
   private Random rng = new Random();
 
@@ -44,7 +51,7 @@ private static final String PAIR_LABEL_ID_FORMAT = "pair_%d_label";
     Resources res = getResources();
     NumberFormat formatter = NumberFormat.getNumberInstance();
     setupPairControls(res, formatter);
-    setupPlayControls();
+    setupPlayControls(res);
     setupScratchControls(res, formatter);
   }
 
@@ -63,9 +70,21 @@ private static final String PAIR_LABEL_ID_FORMAT = "pair_%d_label";
     }
   }
 
-  private void setupPlayControls() {
+  private void setupPlayControls(Resources res) {
      roller = findViewById(R.id.roller);
-    // TODO Find and write up dice ImageView object.
+    diceImages = new ImageView[Roll.NUM_DICE];
+    for(int i = 0; i < Roll.NUM_DICE; i++) {
+      String idString = String.format(DIE_IMAGE_ID_FORMAT, i + 1);
+      int id = res.getIdentifier(idString, "id", getPackageName());
+      diceImages[i] = findViewById(id);
+      diceImages[i].setImageDrawable(getDrawable(R.drawable.face_6));
+    }
+    diceFaces = new Drawable[Roll.NUM_FACES];
+    for (int i = 0; i < Roll.NUM_FACES; i++) {
+String idString = String.format(DICE_FACE_ID_FORMAT, i + 1);
+int id = res.getIdentifier(idString,"drawable", getPackageName());
+diceFaces[i] = getDrawable(id);
+    }
     roller.setOnClickListener(new OnClickListener() {
       @Override
       public void onClick(View v) {
